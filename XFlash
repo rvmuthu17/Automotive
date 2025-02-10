@@ -1,0 +1,157 @@
+#include <EEPROM.h>  // Include EEPROM library for saving the last pattern
+
+// Define pins for left and right indicators
+const int leftIndicatorPin = 2;
+const int rightIndicatorPin = 3;
+
+// Pattern indices
+int pattern = 0;
+bool hazardOn = false;
+
+// Store last pattern in EEPROM (address 0)
+const int lastPatternAddress = 0;
+
+// Timing control for debounce
+unsigned long previousMillis = 0;
+const long debounceDelay = 500;  // 500ms debounce time
+
+void setup() {
+  // Set pin modes
+  pinMode(leftIndicatorPin, OUTPUT);
+  pinMode(rightIndicatorPin, OUTPUT);
+
+  // Read last pattern from EEPROM
+  pattern = EEPROM.read(lastPatternAddress);
+  
+  // Ensure the pattern is within the valid range (0-24)
+  if (pattern < 0 || pattern > 24) {
+    pattern = 0;  // Default to pattern 0 if an invalid value is stored
+  }
+
+  Serial.begin(9600); // For debugging (optional)
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+
+  // Check if it's time to process the switch (debounce control)
+  if (currentMillis - previousMillis >= debounceDelay) {
+    previousMillis = currentMillis;  // Save the last time checked
+
+    if (!hazardOn) {
+      // Turn hazard ON sequence
+      if (digitalRead(rightIndicatorPin) == HIGH) {
+        delay(200);  // Debounce the press
+        if (digitalRead(leftIndicatorPin) == HIGH) {
+          delay(200);  // Debounce the press
+          hazardOn = true;
+          Serial.println("Hazard ON");
+          hazardPattern(pattern);  // Start with the first pattern
+        }
+      }
+    } else {
+      // Hazard ON: Change pattern with right/left indicators
+      if (digitalRead(rightIndicatorPin) == HIGH) {
+        delay(200);  // Debounce for right indicator
+        pattern = (pattern + 1) % 25;  // Next pattern (loop 0-24)
+        EEPROM.write(lastPatternAddress, pattern);  // Store the new pattern in EEPROM
+        hazardPattern(pattern);  // Show the new pattern
+      }
+
+      if (digitalRead(leftIndicatorPin) == HIGH) {
+        delay(200);  // Debounce for left indicator
+        pattern = (pattern + 1) % 25;  // Next pattern (loop 0-24)
+        EEPROM.write(lastPatternAddress, pattern);  // Store the new pattern in EEPROM
+        hazardPattern(pattern);  // Show the new pattern
+      }
+    }
+  }
+
+  // If hazard is ON, manage the hazard sequence
+  if (hazardOn) {
+    // Hazard pattern (alternating patterns)
+    hazardPattern(pattern);
+  } else {
+    // Turn off hazard lights when hazard is off
+    stopHazard();
+  }
+}
+
+// Function to handle hazard light pattern
+void hazardPattern(int patternIndex) {
+  switch (patternIndex) {
+    case 0:
+      // Pattern 1: Both blink simultaneously (standard hazard)
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(500);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      break;
+      
+    case 1:
+      // Pattern 2: Both blink alternatively
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(500);
+      break;
+      
+    case 2:
+      // Pattern 3: Left blinks fast, right blinks slow
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      break;
+      
+    // Pattern 4: Alternating with a pause for both indicators
+    case 3:
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(1000);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(1000);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(1000);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(1000);
+      break;
+
+    // Pattern 5: Simultaneous blinking at different speeds
+    case 4:
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(300);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(300);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(1000);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(1000);
+      break;
+
+    // Add more patterns as needed.
+
+    default:
+      // Default case: Turn both off
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      break;
+  }
+}
+
+// Function to stop all hazard indicators
+void stopHazard() {
+  digitalWrite(leftIndicatorPin, LOW);
+  digitalWrite(rightIndicatorPin, LOW);
+}
