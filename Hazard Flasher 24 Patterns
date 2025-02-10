@@ -1,0 +1,332 @@
+// connect pins for left and right indicators
+const int leftIndicatorPin = 2;
+const int rightIndicatorPin = 3;
+
+int pattern = 0;
+
+
+void setup() {
+  // Set pin modes
+  pinMode(leftIndicatorPin, OUTPUT);
+  pinMode(rightIndicatorPin, OUTPUT);
+}
+
+void loop() {
+  // Switch between patterns based on the counter
+  hazardPattern(pattern);
+  pattern++;
+  if (pattern > 24) pattern = 0;
+
+  // Turn off hazard lights briefly between pattern changes
+  digitalWrite(leftIndicatorPin, LOW);
+  digitalWrite(rightIndicatorPin, LOW);
+  delay(500);
+  delay(1000);
+}
+
+void hazardPattern(int patternIndex) {
+  switch (patternIndex) {
+    // Pattern 1: Both blink simultaneously (standard hazard)
+    case 0:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(500);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      break;
+      
+    // Pattern 2: Both blink alternatively
+    case 1:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(500);
+      break;
+      
+    // Pattern 3: Left blinks fast, right blinks slow
+    case 2:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      break;
+      
+    // Pattern 4: Right blinks fast, left blinks slow
+    case 3:
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      break;
+      
+    // Pattern 5: Alternating lights with 100ms delay
+    case 4:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(100);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(100);
+      break;
+      
+    // Pattern 6: Wave pattern - Left blinks, then Right blinks, with some delay in between
+    case 5:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(100);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(100);
+      break;
+      
+    // Pattern 7: Quick flashes on both
+    case 6:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(100);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(100);
+      break;
+      
+    // Pattern 8: Wave pattern - Right to Left
+    case 7:
+      digitalWrite(rightIndicatorPin, HIGH);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(100);
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(100);
+      break;
+
+    // Pattern 9: Quick blink with both alternating at 150ms
+    case 8:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(150);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(150);
+      break;
+    
+    // Pattern 10: Slow blink with both alternating at 800ms
+    case 9:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(800);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(800);
+      break;
+
+    // Pattern 11: Right blinks twice, then left blinks twice
+    case 10:
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      break;
+
+    // Pattern 12: Left blinks twice, then right blinks twice
+    case 11:
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(500);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      break;
+
+    // Pattern 13: Simulate a waving effect (left-right alternation with slow delay)
+    case 12:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(100);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(500);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(100);
+      break;
+
+    // Pattern 14: Left slow blink, right fast blink
+    case 13:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(800);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(800);
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(800);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(800);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      break;
+
+    // Pattern 15: Random alternating blink
+    case 14:
+      if (random(0, 2) == 0) {
+        digitalWrite(leftIndicatorPin, HIGH);
+        digitalWrite(rightIndicatorPin, LOW);
+      } else {
+        digitalWrite(leftIndicatorPin, LOW);
+        digitalWrite(rightIndicatorPin, HIGH);
+      }
+      delay(random(100, 500));
+      break;
+
+    // Pattern 16: Left blinks twice, right blinks once
+    case 15:
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(500);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(500);
+      digitalWrite(rightIndicatorPin, LOW);
+      break;
+
+    // Pattern 17: Simulate random blink speeds
+    case 16:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(random(100, 500));
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(random(100, 500));
+      break;
+
+    // Pattern 18: Quick alternation with 50ms delay
+    case 17:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(50);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(50);
+      break;
+
+    // Pattern 19: Left blinks slowly, right blinks fast
+    case 18:
+      digitalWrite(leftIndicatorPin, HIGH);
+      delay(800);
+      digitalWrite(leftIndicatorPin, LOW);
+      delay(800);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      break;
+
+    // Pattern 20: Slow back-and-forth (left-right-left)
+    case 19:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(1000);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(1000);
+      digitalWrite(rightIndicatorPin, LOW);
+      break;
+
+    // Pattern 21: Blinking in 4 phases (left-right-left-right)
+    case 20:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(300);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(300);
+      digitalWrite(rightIndicatorPin, LOW);
+      break;
+
+    // Pattern 22: Random flashing pattern
+    case 21:
+      digitalWrite(leftIndicatorPin, random(0, 2) == 0 ? HIGH : LOW);
+      digitalWrite(rightIndicatorPin, random(0, 2) == 0 ? HIGH : LOW);
+      delay(random(100, 500));
+      break;
+
+    // Pattern 23: Alternating blink with 200ms delay
+    case 22:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(200);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(200);
+      break;
+
+    // Pattern 24: Continuous flashing
+    case 23:
+      digitalWrite(leftIndicatorPin, HIGH);
+      digitalWrite(rightIndicatorPin, HIGH);
+      delay(500);
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      delay(500);
+      break;
+
+    // Default case: Both off
+    default:
+      digitalWrite(leftIndicatorPin, LOW);
+      digitalWrite(rightIndicatorPin, LOW);
+      break;
+  }
+}
