@@ -87,3 +87,7 @@ Final Note:
 Before you finalize the installation, make sure to test the system in a safe environment (i.e., the garage) to ensure all connections are working as expected. Additionally, ensure that all components are capable of handling the current drawn by your bike's indicators. If you're unsure about the power ratings, it's always good to consult the specifications of your indicator lights and use appropriate MOSFETs or relays.
 
 Let me know if you need any further details or adjustments!
+
+
+chatbot
+https://youtube.com/watch?v=j4Avy7UzPGw&si=B57zSrUVj2_j_ssH
