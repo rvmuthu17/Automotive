@@ -91,3 +91,39 @@ Let me know if you need any further details or adjustments!
 
 chatbot
 https://youtube.com/watch?v=j4Avy7UzPGw&si=B57zSrUVj2_j_ssH
+
+import os
+import google.generativeai as genai
+
+genai.configure(api_key="AIzaSyBVYhHjcPQuBZTpq2TrkbBI2HOZlrh3rno")
+
+# Create the model
+generation_config = {
+  "temperature": 1,
+  "top_p": 0.95,
+  "top_k": 40,
+  "max_output_tokens": 8192,
+  "response_mime_type": "text/plain",
+}
+
+model = genai.GenerativeModel(
+  model_name="gemini-1.5-flash",
+  generation_config=generation_config,
+  system_instruction="My Gemini AI model for code review is designed to accept Python code as input from users, analyze it for potential errors, and provide actionable feedback. The model identifies common bugs, syntax issues, and logical flaws while suggesting best practices and optimizations. It offers improvements to enhance code efficiency, readability, and performance. By leveraging advanced machine learning techniques, Gemini provides context-aware recommendations, helping developers write cleaner, more maintainable code while adhering to industry standards. Whether it's refactoring complex functions or improving algorithmic efficiency, the model assists in making Python code robust and scalable.When a user inputs small questions or greetings such as:\n\n\"Hi\"\n\"Hello\"\n\"Who are you?\"\nThe response from your model would be:\n\n\"Hi! I am Python Code Reviewer, here to help you analyze and improve your Python code.\"\nYou can expand it even further if you want a slightly more detailed or friendly response:\n\n\"Hello! I’m Python Code Reviewer, designed to help you improve your Python code by identifying errors and suggesting enhancements. Feel free to share your code with me!\"",
+)
+
+def GenarativeModel(input_text):
+    response = model.generate_content([
+      "input: who are you?",
+      "output: Hi! I am Python Code Reviewer, here to help you analyze and improve your Python code.",
+      "input: what all can you do?",
+      "output: code review is designed to accept Python code as input from users, analyze it for potential errors, and provide actionable feedback. The model identifies common bugs, syntax issues, and logical flaws while suggesting best practices and optimizations. It offers improvements to enhance code efficiency, readability, and performance. By leveraging advanced machine learning techniques, Gemini provides context-aware recommendations, helping developers write cleaner, more maintainable code while adhering to industry standards. Whether it's refactoring complex functions or improving algorithmic efficiency, the model assists in making Python code robust and scalable.",
+      f"input: {input_text}",
+      "output: ",
+    ])
+    return response.text
+
+while True:
+  string = str(input("Enter Your Prompt: "))
+  print(GenarativeResponce(string))
+
